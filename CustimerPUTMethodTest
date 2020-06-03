@@ -1,0 +1,77 @@
+package training.aswini.api.customer;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
+import org.apache.http.HttpStatus;
+import org.junit.Test;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
+public class TestCustomerAPINewTest {
+
+String requestBody = "{\n" + 
+		"    \"firstName\": \"Smart\",\n" + 
+		"    \"lastName\": \"Bytes\",\n" + 
+		"    \"city\": \"New Orleans\",\n" + 
+		"    \"county\": \"Orleans\",\n" + 
+		"    \"state\": \"LA\",\n" + 
+		"    \"zip\": \"70117\",\n" + 
+		"    \"phone1\": \"222-456-789\",\n" + 
+		"    \"phone2\": \"333-456-789\",\n" + 
+		"    \"email\": \"JamesBond@smartbytes.com\",\n" + 
+		"    \"web\": \"http://v-logics.com\"\n" + 
+		"}";
+
+	
+String createCustomerAPI = "http://localhost:9090/api/customer/add" ;
+String editCustomerAPI = "http://localhost:9090/api/customer/update/{customer_id}" ;
+String deleteCustomerAPI = "http://localhost:9090/api/customer/delete/{customer_id}" ;
+String getCustomerAPI = "http://localhost:9090/api/customer/show" ;// Requires ID as a query param
+int customer_id;
+
+	@Test  // Annotation 
+	public void testTest_create_customer() {
+		Response createCustResponse =
+		given()
+		.contentType(ContentType.JSON)
+		.body(requestBody)
+		.post(createCustomerAPI)
+		.then()
+//		.statusCode(HttpStatus.SC_OK)
+		.statusCode(HttpStatus.SC_CREATED)
+		.contentType(ContentType.JSON).extract().response() ;
+	    customer_id = createCustResponse.path("id");
+	    System.out.println("New Customer Created ! "+customer_id) ;
+		//fail("Not yet implemented");
+	}
+
+	@Test
+	public void testTest_update_customer() {
+		System.out.println("Customer Id in update method" + customer_id);
+		given()
+		.pathParam("customer_id",customer_id)
+		.contentType(ContentType.JSON)
+		.body(requestBody)
+		.put(editCustomerAPI)
+		.then()
+		.statusCode(HttpStatus.SC_OK)
+		.contentType(ContentType.JSON)
+		.body("id",equalTo(customer_id));
+		
+		//fail("Not yet implemented");
+	}
+
+	/*@Test
+	public void testTest_delete_customer() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testTest_read_customer() {
+		fail("Not yet implemented");
+	}*/
+
+}
