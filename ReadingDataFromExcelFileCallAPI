@@ -1,0 +1,43 @@
+package training.aswini.api.datadrivingtest;
+import training.aswini.api.utils.*;
+import static io.restassured.RestAssured.given;
+import java.util.List;
+
+import io.restassured.http.ContentType;
+
+
+public class ReadingDataFromExcelFileCallAPI {
+	public static void main(String args[]) {
+		String excelFilePath ="C:\\Users\\Aswini Shalini\\eclipse-workspace\\aswini\\resources\\apiTestData.xlsx";
+		String sheetName ="Products";
+		String productID="";
+		double productPrice=0;
+		String productName="";		
+		
+	List<List<String>> productRecords = ExcelUtility.readExcelData(excelFilePath,sheetName);
+	for (List<String> productRecord : productRecords){
+		productID = productRecord.get(0);
+		productName=productRecord.get(1);
+		productPrice=Double.parseDouble(productRecord.get(2));
+		
+	String requestBody = "{\r\n" + 
+			"  \"description\": \""+productName+"\"," + 
+			"  \"price\": \""+productPrice+"," + 
+			"  \"productId\": \""+productI+"\"" + 
+			"}"	;
+		
+	given()
+	.contentType(ContentType.JSON)
+	.body(requestBody)
+	.post("http://localhost:9090/api/product")
+	.then()
+		.extract()
+		.response()
+		.prettyPrint();
+	
+		
+	
+	}
+	}
+
+}
