@@ -23,7 +23,7 @@ public class ReadingDataFromExcelFileCallAPI {
 	String requestBody = "{\r\n" + 
 			"  \"description\": \""+productName+"\"," + 
 			"  \"price\": \""+productPrice+"," + 
-			"  \"productId\": \""+productI+"\"" + 
+			"  \"productId\": \""+productID+"\"" + 
 			"}"	;
 		
 	given()
